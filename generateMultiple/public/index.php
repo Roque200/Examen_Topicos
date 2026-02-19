@@ -11,12 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../core/Router.php';
 require_once __DIR__ . '/../resources/v1/PasswordResource.php';
 
-$basePath        = dirname($_SERVER['SCRIPT_NAME']);
-$router          = new Router('v1', $basePath);
+$router           = new Router('v1', '');
 $passwordResource = new PasswordResource();
 
-$router->addRoute('GET', '/password', [$passwordResource, 'generate']);
-$router->addRoute('POST', '/passwords', [$passwordResource, 'generateMultiple']);
+$router->addRoute('GET',  '/password',          [$passwordResource, 'generate']);
+$router->addRoute('POST', '/passwords',         [$passwordResource, 'generateMultiple']);
 $router->addRoute('POST', '/password/validate', [$passwordResource, 'validate']);
+
 $router->dispatch();
-?>
