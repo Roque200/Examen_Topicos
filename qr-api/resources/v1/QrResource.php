@@ -1,25 +1,12 @@
 <?php
 require_once __DIR__ . '/../../models/QrGenerator.php';
 
-/**
- * QrResource
- * Controlador REST para la API generadora de QR.
- *
- * Endpoints:
- *   POST /api/v1/qr/text    -> QR de texto plano
- *   POST /api/v1/qr/url     -> QR de URL
- *   POST /api/v1/qr/wifi    -> QR de red WiFi
- *   POST /api/v1/qr/geo     -> QR de geolocalización
- */
 class QrResource
 {
     private const MIN_SIZE     = 100;
     private const MAX_SIZE     = 1000;
     private const DEFAULT_SIZE = 300;
 
-    // ------------------------------------------------------------------
-    // POST /api/v1/qr/text
-    // ------------------------------------------------------------------
     public function text(): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -45,9 +32,7 @@ class QrResource
         }
     }
 
-    // ------------------------------------------------------------------
-    // POST /api/v1/qr/url
-    // ------------------------------------------------------------------
+
     public function url(): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -73,9 +58,7 @@ class QrResource
         }
     }
 
-    // ------------------------------------------------------------------
-    // POST /api/v1/qr/wifi
-    // ------------------------------------------------------------------
+
     public function wifi(): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -103,9 +86,7 @@ class QrResource
         }
     }
 
-    // ------------------------------------------------------------------
-    // POST /api/v1/qr/geo
-    // ------------------------------------------------------------------
+
     public function geo(): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -131,9 +112,6 @@ class QrResource
         }
     }
 
-    // ------------------------------------------------------------------
-    // Helpers
-    // ------------------------------------------------------------------
     private function makeGenerator(array $data): QrGenerator
     {
         $size  = isset($data['size'])  ? (int)$data['size']  : self::DEFAULT_SIZE;

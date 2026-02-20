@@ -2,11 +2,11 @@
 
 class QrGenerator
 {
-    // Niveles de corrección de errores
-    const LEVEL_L = 'L'; // ~7%
-    const LEVEL_M = 'M'; // ~15%
-    const LEVEL_Q = 'Q'; // ~25%
-    const LEVEL_H = 'H'; // ~30%
+
+    const LEVEL_L = 'L'; 
+    const LEVEL_M = 'M'; 
+    const LEVEL_Q = 'Q';
+    const LEVEL_H = 'H'; 
 
     private int    $size;
     private string $level;
@@ -22,7 +22,6 @@ class QrGenerator
             mkdir($this->outputDir, 0755, true);
         }
 
-        // Load phpqrcode library
         $libPath = __DIR__ . '/../lib/phpqrcode/qrlib.php';
         if (!file_exists($libPath)) {
             throw new RuntimeException("Librería phpqrcode no encontrada en: {$libPath}");
@@ -32,7 +31,6 @@ class QrGenerator
         }
     }
 
-    /** QR para texto plano */
     public function fromText(string $text): string
     {
         if (empty(trim($text))) {
@@ -41,7 +39,6 @@ class QrGenerator
         return $this->generate($text);
     }
 
-    /** QR para URL */
     public function fromUrl(string $url): string
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
@@ -50,7 +47,6 @@ class QrGenerator
         return $this->generate($url);
     }
 
-    /** QR para WiFi */
     public function fromWifi(string $ssid, string $password = '', string $type = 'WPA'): string
     {
         if (empty(trim($ssid))) {
@@ -62,12 +58,10 @@ class QrGenerator
             throw new InvalidArgumentException("Tipo WiFi no válido. Use: WPA, WPA2, WEP, nopass.");
         }
 
-        // Formato estándar para QR WiFi
         $content = "WIFI:T:{$type};S:{$ssid};P:{$password};;";
         return $this->generate($content);
     }
 
-    /** QR para geolocalización */
     public function fromGeo(float $lat, float $lng): string
     {
         if ($lat < -90 || $lat > 90) {
@@ -81,18 +75,14 @@ class QrGenerator
         return $this->generate($content);
     }
 
-    /**
-     * Genera el QR y devuelve la imagen en base64.
-     */
+   
     private function generate(string $content): string
     {
         $filename = $this->outputDir . uniqid('qr_', true) . '.png';
 
-        // Calcular margen (padding) proporcional al tamaño
         $margin = max(1, (int)($this->size / 100));
 
-        // Generar QR: (content, filename, level, size_pixels, margin)
-        /** @phpstan-ignore-next-line */
+        
         QRcode::png($content, $filename, $this->level, $this->size / 25, $margin);
 
         if (!file_exists($filename)) {
@@ -100,7 +90,7 @@ class QrGenerator
         }
 
         $imageData = file_get_contents($filename);
-        unlink($filename); // limpiar archivo temporal
+        unlink($filename); 
 
         return base64_encode($imageData);
     }
